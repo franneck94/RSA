@@ -1,58 +1,58 @@
 import random
+from math import sqrt
 from euclid import *
 
-def gcd(p, q):
-    while q != 0:
-        (p, q) = (q, p % q)
-    return p
-
+# Function to test if a number is prime
 def is_prime(num):
     if num == 2:
         return True
-    if num < 2 or num % 2 == 0:
+    if num < 2:
         return False
-    for n in range(3, int(num ** 0.5) + 2, 2):
+    for n in [3, 5, 7, 11, 13, 15, 17, 19]:
+        if num % n == 0:
+            return False
+    for n in range(21, int(num * 0.5) + 2, 2):
         if num % n == 0:
             return False
     return True
 
-def generate_primes():
+# Function to generate random primes
+def generate_primes(lb, ub):
     found = False
 
     while not found:
-        p = random.randint(2, 100)
-        q = random.randint(2, 100) 
+        p = random.randint(lb, ub)
+        q = random.randint(lb, ub) 
         if is_prime(p) and is_prime(q) and p != q:
             found = True
 
     return p, q
 
+# Function to compute e and d
 def compute_params(phi_n):
     d = 0
     e = 0
-    found_pair = False
+    found_e = False
 
-    while not found_pair:
-        e_candidate = random.randint(2, phi_n - 1)
-        if gcd(e_candidate, phi_n) == 1:
-            for d_candidate in range(1, phi_n):
-                if gcd(d_candidate, phi_n) and d_candidate != e_candidate:
-                    a, d_candidate, _ = extgcd(e_candidate, phi_n)
-                    if a == 1:
-                        found_pair = True
-                        d = d_candidate
-                        e = e_candidate
+    while found_e == False:
+        e = random.randint(1, phi_n - 1)
+        if gcd(e, phi_n) == 1:
+            found_e = True
+    _, d, _ = extgcd(e, phi_n)
+    if(d < 0):
+        d += phi_n
 
     return d, e
 
-def generate_params(seed=42):
-    p, q = generate_primes()
-    print("P, Q: ", p, q)
+# Main function to generate primes and params
+def generate_params(seed=42, lb=3, ub=100, DEBUG=True):
+    p, q = generate_primes(lb, ub)
     n = p * q 
-    print("N: ", n)
     phi_n = (p-1) * (q-1)   
-    print("Phi(n): ", phi_n)   
     d, e = compute_params(phi_n)
-    print("D, E: ", d, e)
-
+    if DEBUG == True:
+        print("P, Q: ", p, q)
+        print("N: ", n) 
+        print("Phi(n): ", phi_n)  
+        print("E, D: ", e, d)
     return n, d, e 

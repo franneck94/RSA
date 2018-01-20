@@ -1,12 +1,10 @@
-from rsa import *
-from prime import *
+from rsa import RSA
 
 def main():
     x = 97
     y = -1
 
-    n, d, e = generate_params(seed=42)
-    rsa = RSA(n, d, e)
+    rsa = RSA(seed=42, lb=1001, ub=10000)
     print('Original message: ', x)
     y = rsa.encryption(x)
     print('Encrypted message: ', y)
