@@ -2,23 +2,59 @@ import random
 from math import sqrt
 from euclid import *
 
+def select_a_list(n):
+    if n < 2047:
+        return [2]
+    elif n < 1373653:
+        return [2, 3]
+    elif n < 9080191:
+        return [31, 73]
+    elif n < 25326001:
+        return [2, 3, 5]
+    elif n < 3215031751:
+        return [2, 3, 7]
+    else:
+        return [i for i in range(2, n - 1)]
+
+# Square and Multiply Algorithm
+def square_and_multiply(base, exp, mod):
+    if exp == 0:
+        x = 1
+    else:
+        half = square_and_multiply(base, exp // 2, mod)
+        x = half * half
+        if exp % 2 == 1:
+            x *= base
+    return x % mod
+
 # Rabin Miller Test to check primality
-# TODO
-def rabin_miller_test(num):
-    for n in range(21, int(num * 0.5) + 2, 2):
-        if num % n == 0:
-            return False
+def rabin_miller_test(n):
+    a_list = select_a_list(n)
+    for a in a_list:
+        s = 0
+        d = n - 1
+        while d % 2 == 0:
+            s = s + 1
+            d = d >> 1
+        x = square_and_multiply(a, d, n)
+        if x != 1 and x + 1 != n:
+            for r in range(1, s):
+                x = square_and_multiply(x, 2, n)
+                if x == 1:
+                    return False
+                elif x == n - 1:
+                    a = 0
+                    break
+            if a:
+                return False
     return True
 
 # Function to test if a number is prime
 def is_prime(num):
-    if num == 2:
+    if num == 2 or num == 3:
         return True
-    if num < 2:
+    if num < 2 or num % 3 == 0:
         return False
-    for n in [3, 5, 7, 11, 13, 15, 17, 19]:
-        if num % n == 0:
-            return False
     return rabin_miller_test(num)
 
 # Function to generate random primes

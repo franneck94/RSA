@@ -10,10 +10,12 @@ class RSA:
         self.n, self.d, self.e = generate_params(seed, lb, ub)
 
     def encryption(self, message):
-        return (message**self.d) % self.n
+        res = pow(message, self.e , self.n)
+        return res
 
     def decryption(self, message):
-        return (message**self.e) % self.n
+        res = pow(message, self.d , self.n)
+        return res
 
     def get_key_pub(self):
         return (n, e)

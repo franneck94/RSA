@@ -30,9 +30,9 @@ def main():
     print("----- Ergebnis ----")
 
     a1, u1, v1 = extgcd(r0, r1)
-    print(a1)
-    print(u1)
-    print(v1)
+    print("GCD: ", a1)
+    print("s: ", u1)
+    print("t: ", v1)
 
 if __name__ == "__main__":
     main()

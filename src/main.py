@@ -4,7 +4,7 @@ def main():
     x = 97
     y = -1
 
-    rsa = RSA(seed=42, lb=1001, ub=10000)
+    rsa = RSA(seed=42, lb=67108864, ub=1073741823)
     print('Original message: ', x)
     y = rsa.encryption(x)
     print('Encrypted message: ', y)
