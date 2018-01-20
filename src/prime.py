@@ -2,6 +2,14 @@ import random
 from math import sqrt
 from euclid import *
 
+# Rabin Miller Test to check primality
+# TODO
+def rabin_miller_test(num):
+    for n in range(21, int(num * 0.5) + 2, 2):
+        if num % n == 0:
+            return False
+    return True
+
 # Function to test if a number is prime
 def is_prime(num):
     if num == 2:
@@ -11,18 +19,18 @@ def is_prime(num):
     for n in [3, 5, 7, 11, 13, 15, 17, 19]:
         if num % n == 0:
             return False
-    for n in range(21, int(num * 0.5) + 2, 2):
-        if num % n == 0:
-            return False
-    return True
+    return rabin_miller_test(num)
 
 # Function to generate random primes
 def generate_primes(lb, ub):
     found = False
-
+    if lb % 2 == 0:
+        lb += 1
     while not found:
-        p = random.randint(lb, ub)
-        q = random.randint(lb, ub) 
+        # Generate just odd random numbers
+        p = random.randrange(lb, ub, 2)
+        q = random.randrange(lb, ub, 2) 
+        # Check if random numbers are prime
         if is_prime(p) and is_prime(q) and p != q:
             found = True
 
@@ -41,7 +49,6 @@ def compute_params(phi_n):
     _, d, _ = extgcd(e, phi_n)
     if(d < 0):
         d += phi_n
-
     return d, e
 
 # Main function to generate primes and params
