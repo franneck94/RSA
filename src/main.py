@@ -2,7 +2,7 @@ from rsa import *
 from prime import *
 
 def main():
-    x = 12
+    x = 97
     y = -1
 
     n, d, e = generate_params(seed=42)
